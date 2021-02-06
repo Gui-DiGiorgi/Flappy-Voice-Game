@@ -224,6 +224,24 @@ while run:
             
             about_to_start = True
             
+        txt.screen_text_centerpos("Mic Sensitivity: {}".format(vol_limit),int(win_sizes[0]/2), 450, color = (255,255,255))
+        
+        if txt.screen_button_centerpos("More", int(win_sizes[0]/2)-50, 500, transition[0], color = (255,255,255)) and not transition[0]:
+            pygame.time.delay(100)
+            
+            vol_limit += 100
+            
+            if vol_limit > 1000:
+                vol_limit = 1000
+            
+        if txt.screen_button_centerpos("Less", int(win_sizes[0]/2)+50, 500, transition[0], color = (255,255,255)) and not transition[0]:
+            pygame.time.delay(100)
+            
+            vol_limit -= 100
+            
+            if vol_limit < 100:
+                vol_limit = 100
+            
             
     if Replay:
         
