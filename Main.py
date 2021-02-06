@@ -8,7 +8,7 @@ import random
 from time import time
 
 class player():
-    def __init__(self, size, x, w_ysize, frames, gravity, scream_force, color, mode):
+    def __init__(self, size, x, w_ysize, frames, gravity, scream_force, color, vol_detection, mode):
         self.size = size
         self.x = x
         self.w_ysize = w_ysize
@@ -16,6 +16,8 @@ class player():
         self.frames = frames
         self.gravity = gravity*(1/frames)
         self.y_vel = 0
+        self.vol_detection = vol_detection
+        
         
         self.mode = mode
         
@@ -36,7 +38,7 @@ class player():
         self.box = self.box.convert_alpha()                                          
         
     def scream(self,vol):
-        if vol>100:
+        if vol>self.vol_detection:
             
             if self.mode == 0:
 
@@ -170,6 +172,8 @@ about_to_start = False
 
 transition = [False,0]
 
+vol_limit = 100
+
 while run:
     clock.tick(clock_time)
     for event in pygame.event.get():
@@ -185,7 +189,7 @@ while run:
             
         if about_to_start:
             
-            pp = player(20, 300, 600, clock_time, 10, 3, (0,0,255), mode)
+            pp = player(20, 300, 600, clock_time, 10, 3, (0,0,255), vol_limit, mode)
             
             pipe_hole = 300
             
@@ -206,17 +210,15 @@ while run:
         
         txt.screen_text_centerpos("Flappy Voice", int(win_sizes[0]/2), 150, size = 30, color = (255,255,255))
             
-        if txt.screen_button_centerpos("Play Balance", int(win_sizes[0]/2), 300, transition[0], color = (255,255,255)):
+        if txt.screen_button_centerpos("Play Balance", int(win_sizes[0]/2), 300, transition[0], color = (255,255,255)) and not transition[0]:
             pygame.time.delay(100)
-            transition = [True,time()]
             
             mode = 0
             
             about_to_start = True
             
-        if txt.screen_button_centerpos("Play Jump", int(win_sizes[0]/2), 400, transition[0], color = (255,255,255)):
+        if txt.screen_button_centerpos("Play Jump", int(win_sizes[0]/2), 400, transition[0], color = (255,255,255)) and not transition[0]:
             pygame.time.delay(100)
-            transition = [True,time()]
             
             mode = 1
             
@@ -235,7 +237,7 @@ while run:
             
             about_to_start = True
             
-        if txt.screen_button_centerpos("Back to Menu", int(win_sizes[0]/2), 400, transition[0], color = (255,255,255)):
+        if txt.screen_button_centerpos("Back to Menu", int(win_sizes[0]/2), 450, transition[0], color = (255,255,255)):
             pygame.time.delay(100)
             transition = [True,time()]
             
@@ -345,7 +347,7 @@ while run:
 
         active = ["Inactive",(255,0,0)]
 
-        if volume > 100:
+        if volume > vol_limit:
 
             active = ["Active",(0,0,255)]
 
